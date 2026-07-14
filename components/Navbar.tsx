@@ -31,7 +31,6 @@ const Navbar = () => {
         <div>
           <Link href="/">
             <Image
-              className="dark:invert"
               src="/fit-o-clock-white.png"
               alt="Fit-o-clock logo"
               width={100}
