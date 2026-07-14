@@ -29,11 +29,11 @@ const HeroSectionHome = () => {
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10">
         <div
-          className="max-w-[580px] text-white"
+          className="max-w-[580px] text-white text-center md:text-left"
           data-aos="fade-right"
           data-aos-delay="200"
         >
-          <div className="inline-block px-4 py-1 rounded-full bg-[#DAEC40]/20 backdrop-blur-sm text-[#DAEC40] text-xs font-bold tracking-[0.2em] uppercase mb-4">
+          <div className="inline-block px-4 py-1 rounded-full bg-[#DAEC40]/20 backdrop-blur-sm text-[#DAEC40] text-xs font-bold tracking-[0.2em] uppercase mb-4 mx-auto md:mx-0">
             Fitness - Strngth - Wellness
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter drop-shadow-2xl mb-2 uppercase">
@@ -49,11 +49,11 @@ const HeroSectionHome = () => {
             </p>
           </div>
 
-          <div className="mt-8 flex flex-col sm:flex-row gap-4 text-center">
+          <div className="mt-8 flex flex-col sm:flex-row gap-x-4 gap-y-4 justify-center md:justify-start">
             <Link
               href={"/get-started"}
               className={
-                "w-full sm:w-auto bg-[#daec40] p-4 text-black hover:bg-[#c4d33a] transition-colors uppercase font-semibold"
+                "w-full sm:w-auto bg-[#daec40] p-4 text-black hover:bg-[#c4d33a] transition-colors uppercase font-semibold rounded-md"
               }
             >
               δες τα προγράμματα
@@ -62,7 +62,7 @@ const HeroSectionHome = () => {
             <Link
               href={"/get-started"}
               className={
-                "w-full sm:w-auto bg-black p-4 border border-[#daec40] text-white hover:bg-[#daec40] hover:text-black transition-colors uppercase font-semibold"
+                "w-full sm:w-auto bg-black p-4 border border-[#daec40] text-white hover:bg-[#daec40] hover:text-black transition-colors uppercase font-semibold rounded-md"
               }
             >
               κλείσε προπόνηση
