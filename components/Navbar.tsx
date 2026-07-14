@@ -26,7 +26,7 @@ const Navbar = () => {
 
   return (
     <header className="text-white fixed top-0 left-0 right-0 z-50 bg-[#111111]  max-w-[100%] mx-auto">
-      <nav className="container mx-auto flex items-center justify-between pt-2 -pl-34 -pr-34">
+      <nav className="container mx-auto flex items-center justify-between p-4">
         {/* Logo */}
         <div>
           <Link href="/">
@@ -65,7 +65,9 @@ const Navbar = () => {
         <div className="md:hidden">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-white focus:outline-none"
+            className="text-white focus:outline-none p-2"
+            aria-label={isMenuOpen ? "Κλείσιμο μενού" : "Άνοιγμα μενού"}
+            aria-expanded={isMenuOpen}
           >
             <svg
               className="w-6 h-6"
@@ -93,7 +95,7 @@ const Navbar = () => {
       >
         <ul className="flex flex-col items-center gap-6 py-4">
           {NavLinksMainData.map((link) => (
-            <li key={link.label}>
+            <li key={link.href}>
               <NavLink href={link.href} label={link.label} pathname={pathname} />
             </li>
           ))}
