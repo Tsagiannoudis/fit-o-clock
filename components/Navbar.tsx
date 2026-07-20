@@ -96,10 +96,10 @@ const Navbar = ({
           </Link>
         </div>
 
-        {/* Mobile logo — απόλυτα στο κέντρο του navbar */}
+        {/* Mobile logo — απόλυτα στο αριστερό του navbar */}
         <div
           ref={mobileLogoRef}
-          className="absolute left-1/2 top-1/2 h-[56px] w-[80px] -translate-x-1/2 -translate-y-1/2 md:hidden"
+          className="absolute left-1/5 top-1/2 h-[56px] w-[80px] -translate-x-1/2 -translate-y-1/2 md:hidden"
         >
           <Link
             href="/"
