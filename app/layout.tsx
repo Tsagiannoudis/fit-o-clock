@@ -160,7 +160,7 @@ export default function RootLayout({
         )}
 
         <main
-          className={`pt-24 transition-opacity duration-700 ${
+          className={`transition-opacity duration-700 ${
             phase === "finished"
               ? "opacity-100"
               : "pointer-events-none opacity-0"
