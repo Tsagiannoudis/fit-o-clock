@@ -1,7 +1,13 @@
 "use client";
 
 import { Geist, Geist_Mono } from "next/font/google";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import "./globals.css";
@@ -40,7 +46,10 @@ export default function RootLayout({
   });
 
   const animatedLogoRef = useRef<HTMLDivElement>(null);
-  const navbarLogoRef = useRef<HTMLDivElement>(null);
+
+  // Διαφορετικός τελικός στόχος για desktop και mobile
+  const desktopLogoRef = useRef<HTMLDivElement>(null);
+  const mobileLogoRef = useRef<HTMLDivElement>(null);
 
   const isLoading = phase !== "finished";
 
@@ -48,41 +57,54 @@ export default function RootLayout({
     document.title = "Fit O'Clock";
   }, []);
 
-  useLayoutEffect(() => {
+  const calculateTargetPosition = useCallback(() => {
     const animatedLogo = animatedLogoRef.current;
-    const navbarLogo = navbarLogoRef.current;
 
-    if (!animatedLogo || !navbarLogo) return;
+    if (!animatedLogo) return;
 
-    const calculateTargetPosition = () => {
-      const animatedRect = animatedLogo.getBoundingClientRect();
-      const targetRect = navbarLogo.getBoundingClientRect();
+    const isMobile = window.innerWidth < 768;
 
-      const animatedCenterX =
-        animatedRect.left + animatedRect.width / 2;
+    const targetLogo = isMobile
+      ? mobileLogoRef.current
+      : desktopLogoRef.current;
 
-      const animatedCenterY =
-        animatedRect.top + animatedRect.height / 2;
+    if (!targetLogo) return;
 
-      const targetCenterX =
-        targetRect.left + targetRect.width / 2;
+    const animatedRect = animatedLogo.getBoundingClientRect();
+    const targetRect = targetLogo.getBoundingClientRect();
 
-      const targetCenterY =
-        targetRect.top + targetRect.height / 2;
+    const animatedCenterX =
+      animatedRect.left + animatedRect.width / 2;
 
-      setLogoTransform({
-        x: targetCenterX - animatedCenterX,
-        y: targetCenterY - animatedCenterY,
-        scaleX: targetRect.width / animatedRect.width,
-        scaleY: targetRect.height / animatedRect.height,
-      });
-    };
+    const animatedCenterY =
+      animatedRect.top + animatedRect.height / 2;
 
+    const targetCenterX =
+      targetRect.left + targetRect.width / 2;
+
+    const targetCenterY =
+      targetRect.top + targetRect.height / 2;
+
+    setLogoTransform({
+      x: targetCenterX - animatedCenterX,
+      y: targetCenterY - animatedCenterY,
+      scaleX: targetRect.width / animatedRect.width,
+      scaleY: targetRect.height / animatedRect.height,
+    });
+  }, []);
+
+  useLayoutEffect(() => {
     calculateTargetPosition();
 
-    window.addEventListener("resize", calculateTargetPosition);
+    const handleResize = () => {
+      // Επανυπολογισμός αν αλλάξει το μέγεθος ή ο προσανατολισμός
+      calculateTargetPosition();
+    };
+
+    window.addEventListener("resize", handleResize);
 
     const startTimer = window.setTimeout(() => {
+      calculateTargetPosition();
       setPhase("moving");
     }, 700);
 
@@ -93,14 +115,14 @@ export default function RootLayout({
     return () => {
       window.clearTimeout(startTimer);
       window.clearTimeout(finishTimer);
-      window.removeEventListener("resize", calculateTargetPosition);
+      window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [calculateTargetPosition]);
 
   return (
     <html
       lang="el"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full bg-black antialiased`}
     >
       <body
         className={`min-h-full bg-black ${
@@ -108,22 +130,28 @@ export default function RootLayout({
         }`}
       >
         <Navbar
-          logoPlaceholderRef={navbarLogoRef}
+          desktopLogoRef={desktopLogoRef}
+          mobileLogoRef={mobileLogoRef}
           isLogoVisible={phase === "finished"}
+          isNavbarContentVisible={phase !== "center"}
         />
 
-        {/* Loading overlay */}
+        {/* Loading animation */}
         {phase !== "finished" && (
           <div
             className={`fixed inset-0 z-[100] bg-[#111111] transition-opacity duration-500 ${
               phase === "moving"
-                ? "delay-700 opacity-0"
+                ? "delay-[700ms] opacity-0"
                 : "opacity-100"
             }`}
           >
+            {/* Decorative glow */}
+            <div className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DAEC40]/10 blur-[100px] md:h-[450px] md:w-[450px]" />
+
+            {/* Animated logo */}
             <div
               ref={animatedLogoRef}
-              className="fixed left-1/2 top-1/2 h-[140px] w-[200px] -translate-x-1/2 -translate-y-1/2"
+              className="fixed left-1/2 top-1/2 h-[105px] w-[150px] will-change-transform md:h-[140px] md:w-[200px]"
               style={{
                 transform:
                   phase === "moving"
@@ -140,10 +168,15 @@ export default function RootLayout({
                       )
                     `
                     : "translate(-50%, -50%) scale(1)",
+
                 transition:
                   phase === "moving"
-                    ? "transform 1000ms cubic-bezier(0.76, 0, 0.24, 1)"
+                    ? `
+                      transform 1000ms
+                      cubic-bezier(0.76, 0, 0.24, 1)
+                    `
                     : "none",
+
                 transformOrigin: "center",
               }}
             >
@@ -153,14 +186,21 @@ export default function RootLayout({
                 fill
                 priority
                 className="object-contain"
-                sizes="200px"
+                sizes="(max-width: 767px) 150px, 200px"
               />
             </div>
+
+            {/* Loading line */}
+            <div
+              className={`absolute bottom-0 left-0 h-[2px] bg-[#DAEC40] transition-[width] duration-[1600ms] ease-out ${
+                phase === "moving" ? "w-full" : "w-0"
+              }`}
+            />
           </div>
         )}
 
         <main
-          className={`transition-opacity duration-700 ${
+          className={`bg-black transition-opacity duration-700 ${
             phase === "finished"
               ? "opacity-100"
               : "pointer-events-none opacity-0"
