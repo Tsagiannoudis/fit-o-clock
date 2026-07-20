@@ -4,11 +4,9 @@ import GridTrainings from "@/components/home/GridTrainings";
 
 export default function Home() {
   return (
-   
-      <main className="">
-        <HeroSectionHome />
-        <GridTrainings />
-      </main>
- 
+    <>
+      <HeroSectionHome />
+      <GridTrainings />
+    </>
   );
 }

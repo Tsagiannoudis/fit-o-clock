@@ -1,113 +1,135 @@
 "use client";
 
 import NavLinksMainData from "@/data/NavLinksMainData";
-import Link from "next/link";
-import Image from "next/image";
-import { useState } from "react";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { RefObject, useState } from "react";
 
-// Helper component to avoid repeating the link logic
-const NavLink = ({ href, label, pathname }: { href: string, label: string, pathname: string }) => (
-  <Link
-    href={href}
-    className={`px-2 py-1 text-lg font-medium transition-all duration-200 ${
-      pathname === href
-        ? "text-black p-2 border-2 rounded-2xl border-[#DAEC40] bg-[#DAEC40]"
-        : "text-gray-300 hover:text-[#DAEC40] border-b-2 border-transparent"
-    }`}
-  >
-    {label}
-  </Link>
-);
+type NavbarProps = {
+  logoPlaceholderRef: RefObject<HTMLDivElement | null>;
+  isLogoVisible: boolean;
+};
 
-const Navbar = () => {
+const NavLink = ({
+  href,
+  label,
+  pathname,
+}: {
+  href: string;
+  label: string;
+  pathname: string;
+}) => {
+  const isActive = pathname === href;
+
+  return (
+    <Link
+      href={href}
+      className={`rounded-2xl px-3 py-2 text-lg font-medium transition-all duration-200 ${
+        isActive
+          ? "bg-[#DAEC40] text-black outline-2 outline-offset-[-2px] outline-[#DAEC40]"
+          : "text-gray-300 hover:text-[#DAEC40]"
+      }`}
+    >
+      {label}
+    </Link>
+  );
+};
+
+const Navbar = ({
+  logoPlaceholderRef,
+  isLogoVisible,
+}: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
 
   return (
-    <header className="text-white fixed top-0 left-0 right-0 z-50 bg-[#111111]  max-w-[100%] mx-auto">
-      <nav className="container mx-auto flex items-center justify-between p-4">
-        {/* Logo */}
-        <div>
-          <Link href="/">
+    <header className="fixed inset-x-0 top-0 z-50 bg-[#111111] text-white">
+      <nav className="container mx-auto flex h-24 items-center justify-between px-4">
+        {/* Η τελική θέση του animated logo */}
+        <div
+          ref={logoPlaceholderRef}
+          className="relative h-[70px] w-[100px]"
+        >
+          <Link
+            href="/"
+            aria-label="Αρχική σελίδα Fit O'Clock"
+            className={`absolute inset-0 transition-opacity duration-300 ${
+              isLogoVisible ? "opacity-100" : "opacity-0"
+            }`}
+          >
             <Image
               src="/fit-o-clock-white.png"
-              alt="Fit-o-clock logo"
-              width={100}
-              height={20}
+              alt="Fit O'Clock"
+              fill
               priority
+              className="object-contain"
+              sizes="100px"
             />
           </Link>
         </div>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:block">
-          <ul className="flex items-center gap-6">
-            {NavLinksMainData.map((link) => (
-              <li key={link.href} className="nav-item">
-                <NavLink href={link.href} label={link.label} pathname={pathname} />
-              </li>
-            ))}
-          </ul>
-        </div>
-        
-        <div className="hidden md:block">
-          <Link
-            href={"/get-started"} 
-            className={"bg-[#daec40] p-4 text-black hover:bg-yellow-300 transition-colors uppercase font-semibold"}
-          >
-            Ξεκίνα τώρα!
-          </Link>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-white focus:outline-none p-2"
-            aria-label={isMenuOpen ? "Κλείσιμο μενού" : "Άνοιγμα μενού"}
-            aria-expanded={isMenuOpen}
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d={
-                  isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"
-                }
-              ></path>
-            </svg>
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Menu */}
-      <div
-        className={`md:hidden ${isMenuOpen ? "block border-t border-gray-700" : "hidden"}`}
-      >
-        <ul className="flex flex-col items-center gap-6 py-4">
+        {/* Desktop menu */}
+        <ul className="hidden items-center gap-6 md:flex">
           {NavLinksMainData.map((link) => (
             <li key={link.href}>
-              <NavLink href={link.href} label={link.label} pathname={pathname} />
+              <NavLink
+                href={link.href}
+                label={link.label}
+                pathname={pathname}
+              />
             </li>
           ))}
-          <li>
-            <Link
-              href="/get-started" // Changed to a more descriptive URL
-              className="bg-[#daec40] p-4 text-black hover:bg-yellow-300 transition-colors uppercase font-semibold"
-            >
-              Ξεκίνα τώρα!
-            </Link>
-          </li>
         </ul>
-      </div>
+
+        <Link
+          href="/get-started"
+          className="hidden bg-[#DAEC40] px-6 py-4 font-semibold uppercase text-black transition-colors hover:bg-[#c4d33a] md:block"
+        >
+          Ξεκίνα τώρα!
+        </Link>
+
+        {/* Mobile button */}
+        <button
+          type="button"
+          onClick={() => setIsMenuOpen((current) => !current)}
+          className="p-2 text-white md:hidden"
+          aria-label={isMenuOpen ? "Κλείσιμο μενού" : "Άνοιγμα μενού"}
+          aria-expanded={isMenuOpen}
+        >
+          <span className="block h-0.5 w-6 bg-current" />
+          <span className="my-1.5 block h-0.5 w-6 bg-current" />
+          <span className="block h-0.5 w-6 bg-current" />
+        </button>
+
+        {/* Mobile menu */}
+        <div
+          className={`absolute left-0 right-0 top-full border-t border-white/10 bg-[#111111] md:hidden ${
+            isMenuOpen ? "block" : "hidden"
+          }`}
+        >
+          <ul className="flex flex-col items-center gap-5 py-6">
+            {NavLinksMainData.map((link) => (
+              <li key={link.href}>
+                <NavLink
+                  href={link.href}
+                  label={link.label}
+                  pathname={pathname}
+                />
+              </li>
+            ))}
+
+            <li>
+              <Link
+                href="/get-started"
+                className="inline-block bg-[#DAEC40] px-6 py-4 font-semibold uppercase text-black"
+              >
+                Ξεκίνα τώρα!
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </nav>
     </header>
   );
 };

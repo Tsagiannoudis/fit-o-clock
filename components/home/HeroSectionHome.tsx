@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const HeroSectionHome = () => {
   return (
-    <section className="relative min-h-[350px] h-[55vh] md:h-[95vh] w-full flex items-center overflow-hidden">
+    <section className="relative min-h-[350px] h-[110vh] md:h-[95vh] w-full flex items-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
