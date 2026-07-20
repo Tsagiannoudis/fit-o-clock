@@ -49,7 +49,7 @@ const Navbar = ({
         {/* Η τελική θέση του animated logo */}
         <div
           ref={logoPlaceholderRef}
-          className="relative h-[70px] w-[100px]"
+          className="relative hidden h-[70px] w-[100px] md:block"
         >
           <Link
             href="/"
