@@ -47,7 +47,7 @@ export default function RootLayout({
 
   const animatedLogoRef = useRef<HTMLDivElement>(null);
 
-  // Διαφορετικός τελικός στόχος για desktop και mobile
+  // Τελικός στόχος για desktop και mobile
   const desktopLogoRef = useRef<HTMLDivElement>(null);
   const mobileLogoRef = useRef<HTMLDivElement>(null);
 
@@ -110,7 +110,7 @@ export default function RootLayout({
 
     const finishTimer = window.setTimeout(() => {
       setPhase("finished");
-    }, 1800);
+    }, 1700);
 
     return () => {
       window.clearTimeout(startTimer);
@@ -141,7 +141,7 @@ export default function RootLayout({
           <div
             className={`fixed inset-0 z-[100] bg-[#111111] transition-opacity duration-500 ${
               phase === "moving"
-                ? "delay-[700ms] opacity-0"
+                ? "delay-[1700ms] opacity-0"
                 : "opacity-100"
             }`}
           >
