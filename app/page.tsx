@@ -1,5 +1,7 @@
 import HeroSectionHome from "@/components/home/HeroSectionHome";
 import GridTrainings from "@/components/home/GridTrainings";
+import MiddleHeroHome from "@/components/home/MiddleHeroHome";
+
 
 
 export default function Home() {
@@ -7,6 +9,7 @@ export default function Home() {
     <>
       <HeroSectionHome />
       <GridTrainings />
+      <MiddleHeroHome />
     </>
   );
 }

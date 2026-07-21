@@ -10,6 +10,7 @@ import {
 } from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -208,6 +209,7 @@ export default function RootLayout({
         >
           {children}
         </main>
+        {phase === "finished" && <Footer />}
       </body>
     </html>
   );
