@@ -27,7 +27,7 @@ const GridTrainings = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 mt-12">
+      <div className="container mx-auto mt-12">
         <div className="flex flex-wrap justify-center gap-8">
           {TrainingData.map((item, index) => (
             <div 
@@ -36,7 +36,7 @@ const GridTrainings = () => {
               data-aos="fade-up"
               data-aos-delay={index * 100}
             >
-              <div className="w-3/6 z-10">
+              <div className="w-3/6 z-10 p-2 rounded-lg">
                 <Image
                   src={item.shortLogo}
                   alt={`${item.title} logo`}
@@ -53,7 +53,7 @@ const GridTrainings = () => {
                   <HiArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
-              <div className="absolute right-0 top-0 h-full w-2/5 opacity-50 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute right-0 top-0 h-full w-3/6 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
                 <Image 
                   src={item.image}
                   alt={item.title}
